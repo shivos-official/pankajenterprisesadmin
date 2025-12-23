@@ -24,19 +24,11 @@ label { font-size:14px; }
 table { width:100%; border-collapse: collapse; margin-top:15px; font-size:14px;}
 th, td { border:1px solid #ccc; padding:6px; text-align:left; }
 th { background:#764ba2; color:white; }
-
 @media (max-width:600px){
     .product-info { flex-direction:column; align-items:flex-start; }
     .product-actions { flex-direction:column; }
     .product-actions button { width:100%; }
 }
-
-/* ===== OVERFLOW FIXED ===== */
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-}
-
 </style>
 </head>
 <body>
@@ -57,9 +49,6 @@ th { background:#764ba2; color:white; }
 <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
 
 <h2>Orders</h2>
-
-<!-- ===== TABLE WRAPPER ADDED ===== -->
-<div class="table-wrapper">
 <table>
 <thead>
 <tr>
@@ -73,13 +62,15 @@ th { background:#764ba2; color:white; }
 </tr>
 </thead>
 <tbody id="orders-table">
+<!-- Orders loaded here -->
 </tbody>
 </table>
-</div>
-<!-- =============================== -->
 
 <h2>Manage Products</h2>
-<div id="product-list"></div>
+<button class="add-btn" onclick="toggleProductList()">Show Products</button>
+<div id="product-list" style="display:none;">
+  <!-- Products loaded here with remove & stock options -->
+</div>
 
 <h2>Add Product</h2>
 <div>
@@ -119,7 +110,20 @@ function logoutAdmin(){
   document.getElementById("admin-pass").value="";
 }
 
-// Orders
+// Toggle Product List
+function toggleProductList(){
+  const container = document.getElementById("product-list");
+  const btn = event.target;
+  if(container.style.display === "none"){
+    container.style.display = "block";
+    btn.innerText = "Hide Products";
+  } else {
+    container.style.display = "none";
+    btn.innerText = "Show Products";
+  }
+}
+
+// Orders (stored in localStorage)
 function loadOrders(){
   const orders = JSON.parse(localStorage.getItem("orders") || "[]");
   const tbody = document.getElementById("orders-table");
